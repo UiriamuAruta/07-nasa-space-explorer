@@ -95,6 +95,33 @@ function openModal(item) {
   });
 }
 
+// Helper: set end date to 8 days after start date (max today)
+function autoFillEndDate() {
+  // Get the selected start date
+  const startDate = new Date(startInput.value);
+  // Create a new date 8 days after start date
+  const endDate = new Date(startDate);
+  endDate.setDate(startDate.getDate() + 8);
+
+  // Get today's date in YYYY-MM-DD format
+  const today = new Date().toISOString().split('T')[0];
+
+  // If calculated end date is after today, use today
+  const endDateStr = endDate > new Date(today)
+    ? today
+    : endDate.toISOString().split('T')[0];
+
+  // Set the end date input value
+  endInput.value = endDateStr;
+}
+
+// When the user changes the start date, auto-fill the end date and update gallery
+startInput.addEventListener('change', () => {
+  autoFillEndDate();
+  // Optionally, fetch new images automatically:
+  // getSpaceImages();
+});
+
 // Fetch and show images/videos
 async function getSpaceImages() {
   const startDate = startInput.value;
